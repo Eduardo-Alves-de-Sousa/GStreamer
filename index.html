@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GStreamer Interface</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="encoder">
+        <h2>Encoder</h2>
+        <label for="encoderPort">Porta:</label>
+        <input type="text" id="encoderPort" placeholder="Porta do Encoder">
+        <button onclick="startEncoder()">Iniciar Encoder</button>
+    </div>
+
+    <div id="decoder">
+        <h2>Decoder</h2>
+        <label for="decoderPort">Porta:</label>
+        <input type="text" id="decoderPort" placeholder="Porta do Decoder">
+        <button onclick="startDecoder()">Iniciar Decoder</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
