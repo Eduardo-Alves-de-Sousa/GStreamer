@@ -1,27 +1,40 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const { exec } = require('child_process');
+const http = require('http');
+const socketIO = require('socket.io');
+const path = require('path');
 
 const app = express();
-const PORT = 3000;
+const server = http.createServer(app);
+const io = socketIO(server);
 
-app.use(bodyParser.json());
+//configuração de arquivos estáticos
+app.use(express.static('public'));
 
-app.post('/execute-command', (req, res) => {
-    const command = req.body.command;
+//Adiciona a rota para o HTML
+app.get("/", function(re, res){
+    res.sendFile(__dirname + "/index.html")
+})
+io.on('connection', (socket) => {
+    console.log('Client connected');
 
-    exec(command, (error, stdout, stderr) => {
-        if (error) {
-            console.error(`Erro ao executar o comando: ${error}`);
-            res.status(500).send(`Erro ao executar o comando: ${error}`);
-            return;
-        }
+    socket.on('offer', (data) => {
+        socket.broadcast.emit('offer', data);
+    });
 
-        console.log(`Comando executado com sucesso: ${stdout}`);
-        res.send(`Comando executado com sucesso: ${stdout}`);
+    socket.on('answer', (data) => {
+        socket.broadcast.emit('answer', data);
+    });
+
+    socket.on('ice-candidate', (data) => {
+        socket.broadcast.emit('ice-candidate', data);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('Client disconnected');
     });
 });
 
-app.listen(PORT, () => {
-    console.log(`Servidor rodando em http://localhost:${PORT}`);
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
 });
