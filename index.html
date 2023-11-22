@@ -17,6 +17,44 @@
             background-color: #aeafaf;
         }
 
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
         .container {
             max-width: 600px;
             width: 80%;
@@ -41,16 +79,22 @@
             border-radius: 5px;
         }
 
-        #remoteAudio {
+        #remoteAudioContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             margin-top: 20px;
+        }
+
+        #remoteAudio {
             width: 100%;
             max-width: 400px;
             border-radius: 5px;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
         }
 
         button {
-            margin-top: 20px;
             padding: 15px;
             font-size: 18px;
             background-color: #2ecc71;
@@ -64,19 +108,21 @@
         button:hover {
             background-color: #27ae60;
         }
-
-        canvas {
-            margin-top: 20px;
-            width: 100%;
-            max-width: 400px;
-            height: 100px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-        }
     </style>
 </head>
 <body>
+    <!-- Modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Bem-vindo ao Projeto de Streaming de Áudio!</h2>
+            <p>Este projeto demonstra a transmissão de áudio entre um encoder e um decoder usando WebRTC e GStreamer.</p>
+            <p>Desfrute da experiência de streaming de áudio em tempo real!</p>
+            
+        </div>
+    </div>
+
+    <!-- Conteúdo principal -->
     <div class="container">
         <label for="encoderPort">Encoder Port:</label>
         <input type="number" id="encoderPort" value="7777">
@@ -84,12 +130,24 @@
         <label for="decoderPort">Decoder Port:</label>
         <input type="number" id="decoderPort" value="7778">
 
-        <audio id="remoteAudio" controls></audio>
-        <canvas id="frequencyCanvas"></canvas>
-        <button onclick="startStreaming()">Start Streaming</button>
+        <div id="remoteAudioContainer">
+            <audio id="remoteAudio" controls></audio>
+            <button onclick="startStreaming()">Start Streaming</button>
+        </div>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="app.js"></script>
+    <script>
+        function openModal() {
+            document.getElementById('myModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('myModal').style.display = 'none';
+        }
+
+        window.onload = openModal;
+    </script>
 </body>
 </html>

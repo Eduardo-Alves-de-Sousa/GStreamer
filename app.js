@@ -5,10 +5,10 @@ let pc; // Peer Connection
 let encoderPort; // Porta do Encoder
 let decoderPort; // Porta do Decoder
 const socket = io(); // Objeto do Socket.IO para comunicação com o servidor
-let analyser;
-let frequencyData;
-let canvas;
-let canvasCtx;
+// let analyser;
+// let frequencyData;
+// let canvas;
+// let canvasCtx;
 
 // Função principal para iniciar a transmissão
 function startStreaming() {
@@ -30,8 +30,8 @@ function startStreaming() {
     startGStreamerProcess(encoderCommand);
     startGStreamerProcess(decoderCommand);
 
-    // Inicializa o analisador de áudio e a barra de frequência
-    initializeAudioAnalyzer();
+    // // Inicializa o analisador de áudio e a barra de frequência
+    // initializeAudioAnalyzer();
 }
 
 // Função para inicializar a conexão peer-to-peer (Peer Connection)
@@ -147,40 +147,40 @@ function startGStreamerProcess(command) {
         console.log(`child process exited with code ${code}`);
     });
 }
-// Função para inicializar o analisador de áudio
-function initializeAudioAnalyzer() {
-    const audio = document.getElementById('remoteAudio');
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    analyser = audioCtx.createAnalyser();
-    const source = audioCtx.createMediaStreamSource(remoteStream); // Corrigir aqui
-    source.connect(analyser);
-    analyser.connect(audioCtx.destination);
-    analyser.fftSize = 256;
-    frequencyData = new Uint8Array(analyser.frequencyBinCount);
+// // Função para inicializar o analisador de áudio
+// function initializeAudioAnalyzer() {
+//     const audio = document.getElementById('remoteAudio');
+//     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+//     analyser = audioCtx.createAnalyser();
+//     const source = audioCtx.createMediaStreamSource(remoteStream); // Corrigir aqui
+//     source.connect(analyser);
+//     analyser.connect(audioCtx.destination);
+//     analyser.fftSize = 256;
+//     frequencyData = new Uint8Array(analyser.frequencyBinCount);
 
-    canvas = document.getElementById('frequencyCanvas');
-    canvasCtx = canvas.getContext('2d');
-    drawFrequency();
-}
+//     canvas = document.getElementById('frequencyCanvas');
+//     canvasCtx = canvas.getContext('2d');
+//     drawFrequency();
+// }
 
-// Função para desenhar a barra de frequência no canvas
-function drawFrequency() {
-    analyser.getByteFrequencyData(frequencyData);
+// // Função para desenhar a barra de frequência no canvas
+// function drawFrequency() {
+//     analyser.getByteFrequencyData(frequencyData);
 
-    canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+//     canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
 
-    const barWidth = (canvas.width / frequencyData.length) * 2.5;
-    let barHeight;
-    let x = 0;
+//     const barWidth = (canvas.width / frequencyData.length) * 2.5;
+//     let barHeight;
+//     let x = 0;
 
-    for (let i = 0; i < frequencyData.length; i++) {
-        barHeight = frequencyData[i] / 2;
+//     for (let i = 0; i < frequencyData.length; i++) {
+//         barHeight = frequencyData[i] / 2;
 
-        canvasCtx.fillStyle = 'rgb(' + (barHeight + 100) + ',50,50)';
-        canvasCtx.fillRect(x, canvas.height - barHeight / 2, barWidth, barHeight);
+//         canvasCtx.fillStyle = 'rgb(' + (barHeight + 100) + ',50,50)';
+//         canvasCtx.fillRect(x, canvas.height - barHeight / 2, barWidth, barHeight);
 
-        x += barWidth + 1;
-    }
+//         x += barWidth + 1;
+//     }
 
-    requestAnimationFrame(drawFrequency);
-}
+//     requestAnimationFrame(drawFrequency);
+// }
